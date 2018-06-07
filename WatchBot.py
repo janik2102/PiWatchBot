@@ -52,7 +52,7 @@ def isAdmin(identity):
 
 #make video and return the filepath
 def makevideo():
-    currentTime = datetime.datetime.now()
+    currentTime = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     path = vidpath + '/' + currentTime + '.h264'
     print('Saving Video to ' + path)
     camera.start_recording(path)
@@ -64,7 +64,7 @@ def makevideo():
 
 #make picture and return the filepath
 def makepicture():
-    currentTime = datetime.datetime.now()
+    currentTime = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     path = picpath + '/' + currentTime + '.jpg'
     print('Saving Photo to' + path)
     camera.capture(path)
