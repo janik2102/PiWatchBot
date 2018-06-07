@@ -42,7 +42,9 @@ def picture(bot, update):
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Make Video of the room.')
-        update.message.reply_text('Video of the room.')
+        tmpvideo = makevideo()
+        update.message.reply_video(video=open(tmpvideo, 'rb'))
+        deletefile(tmpvideo)
 
 
 #Define Methods
@@ -66,7 +68,7 @@ def makevideo():
 def makepicture():
     currentTime = datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S")
     path = picpath + '/' + currentTime + '.jpg'
-    print('Saving Photo to' + path)
+    print('Saving Photo to ' + path)
     camera.capture(path)
     print('Saved successfull')
     return path
