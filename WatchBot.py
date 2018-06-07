@@ -1,6 +1,8 @@
 import telegram
 import json
 
+from picamera import PiCamera
+from time import sleep
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 #Read JSON Config with Bot Token and Admin-Identity
@@ -10,6 +12,7 @@ with open('Configuration.json') as config_json:
 token = configuration.get('token')
 admin = configuration.get('admin')
 systemon = True
+camera = PiCamera()
 
 #Define User Commands
 def on(bot, update):
@@ -29,6 +32,9 @@ def picture(bot, update):
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
         update.message.reply_text('Video of the room.')
+        camera.start_preview()
+        sleep(10)
+        camera.stop_preview()
 
 #Define Methods
 def isAdmin(identity):
