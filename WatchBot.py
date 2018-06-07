@@ -11,6 +11,9 @@ with open('Configuration.json') as config_json:
 
 token = configuration.get('token')
 admin = configuration.get('admin')
+videopath = configuration.get('vidpath')
+picturepath = configuration.get('picpath')
+temppath = configuration.get('temppath')
 systemon = True
 camera = PiCamera()
 
@@ -32,9 +35,10 @@ def picture(bot, update):
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
         update.message.reply_text('Video of the room.')
-        camera.start_preview()
+        camera.start_recording(temppath + '/tmpvid.h264')
         sleep(10)
-        camera.stop_preview()
+        camera.stop_recording()
+        bot.sendVideo(update.message.chat_id, temppath + '/tmpvid.h264')
 
 #Define Methods
 def isAdmin(identity):
