@@ -8,7 +8,7 @@ from time import sleep
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 #Read JSON Config with Bot Token and Admin-Identity
-configuration = json.load('configuration.json')
+configuration = json.load(open('configuration.json'))
 
 token = configuration.get('token')
 admin = configuration.get('admin')
@@ -21,24 +21,27 @@ camera = PiCamera()
 #Define User Commands
 def on(bot, update):
     if (isAdmin(update.message.chat.username)):
+        print('Watchsystem activated.')
         systemon = True
         update.message.reply_text('Watchsystem activated.')
 
 def off(bot, update):
     if (isAdmin(update.message.chat.username)):
+        print('Watchsystem deactivated.')
         systemon = False
         update.message.reply_text('Watchsystem deactivated.')
 
 def picture(bot, update):
     if (isAdmin(update.message.chat.username)):
-        update.message.reply_text('Picture of the room.')
-        tmpfile = makepicture()
-        update.message.reply_photo(photo=open(tmpfile, 'rb'))
-        deletefile(tmpfile)
+        print('Make Picture of the room.')
+        tmppicture = makepicture()
+        update.message.reply_photo(photo=open(tmppicture, 'rb'))
+        deletefile(tmppicture)
 
 
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
+        print('Make Video of the room.')
         update.message.reply_text('Video of the room.')
 
 
@@ -51,16 +54,21 @@ def isAdmin(identity):
 def makevideo():
     currentTime = datetime.datetime.now()
     path = vidpath + '/' + currentTime + '.h264'
+    print('Saving Video to ' + path)
     camera.start_recording(path)
+    print('Recording ...')
     sleep(10)
     camera.stop_recording()
+    print('Saved successfull')
     return path
 
 #make picture and return the filepath
 def makepicture():
     currentTime = datetime.datetime.now()
-    path = picpath + '/' + currentTime + 'jpg'
+    path = picpath + '/' + currentTime + '.jpg'
+    print('Saving Photo to' + path)
     camera.capture(path)
+    print('Saved successfull')
     return path
 
 #delete file in filesystem
