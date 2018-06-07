@@ -5,7 +5,7 @@
     "first_name":"Janik",
     "last_name":"Siller"
   },
-  "temppath":"/home/pi/PiWatchBot/temp",
-  "vidpath":"/home/pi/PiWatchBot/videos",
-  "picpath":"/home/pi/PiWatchBot/Pictures"
+  "temppath":"temp",
+  "vidpath":"videos",
+  "picpath":"pictures"
 }
