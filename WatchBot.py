@@ -1,35 +1,56 @@
+###########################################################################################
+#Imports
+###########################################################################################
 import telegram
 import json
 import os
 import datetime
+import RPi.GPIO as GPIO
 
 from picamera import PiCamera
 from time import sleep
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
+###########################################################################################
+#Initialisation
+###########################################################################################
+
 #Read JSON Config with Bot Token and Admin-Identity
 configuration = json.load(open('configuration.json'))
-
 token = configuration.get('token')
 admin = configuration.get('admin')
 vidpath = configuration.get('vidpath')
 picpath = configuration.get('picpath')
 temppath = configuration.get('temppath')
+
+#General System
 systemon = True
+
+#Camera
 camera = PiCamera()
 
+#Motion Sensor
+motionpin = 23
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(motionpin, GPIO.IN)
+
+###########################################################################################
 #Define User Commands
+###########################################################################################
+
 def on(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Watchsystem activated.')
         systemon = True
         update.message.reply_text('Watchsystem activated.')
 
+
 def off(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Watchsystem deactivated.')
         systemon = False
         update.message.reply_text('Watchsystem deactivated.')
+
 
 def picture(bot, update):
     if (isAdmin(update.message.chat.username)):
@@ -49,8 +70,10 @@ def video(bot, update):
         update.message.reply_video(video=open(tmpvideo, 'rb'))
         deletefile(tmpvideo)
 
-
+###########################################################################################
 #Define Methods
+###########################################################################################
+
 #check if user is admin
 def isAdmin(identity):
     return admin.get('username') == identity
@@ -80,6 +103,14 @@ def makepicture():
 def deletefile(path):
     os.remove(path)
 
+#Callback if motion is detected
+def motion_callback(channel):
+    print('Motion detected!')
+
+###########################################################################################
+#Main Code
+###########################################################################################
+
 updater = Updater(token)
 updater.dispatcher.add_handler(CommandHandler('on', on))
 updater.dispatcher.add_handler(CommandHandler('off', off))
@@ -88,5 +119,11 @@ updater.dispatcher.add_handler(CommandHandler('video', video))
 
 #Start the Bot
 updater.start_polling()
+
+#Detecting Motion
+GPIO.add_event_detect(motionpin, GPIO.RISING, callback=motion_callback)
+
 updater.idle()
+
+GPIO.cleanup()
 
