@@ -154,7 +154,7 @@ updater = Updater(token)
 updater.dispatcher.add_handler(CommandHandler('on', on))
 updater.dispatcher.add_handler(CommandHandler('off', off))
 updater.dispatcher.add_handler(CommandHandler('picture', picture))
-updater.dispatcher.add_handler(CommandHandler('savepicture'), savePicture)
+updater.dispatcher.add_handler(CommandHandler('savepicture', savePicture))
 updater.dispatcher.add_handler(CommandHandler('video', video))
 updater.dispatcher.add_handler(CommandHandler('savevideo', video))
 
