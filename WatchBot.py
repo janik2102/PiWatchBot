@@ -35,6 +35,7 @@ def picture(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Make Picture of the room.')
         tmppicture = makepicture()
+        bot.send_chat_action(update.message.chat.id, action=telegram.ChatAction.UPLOAD_PHOTO)
         update.message.reply_photo(photo=open(tmppicture, 'rb'))
         deletefile(tmppicture)
 
@@ -42,7 +43,9 @@ def picture(bot, update):
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Make Video of the room.')
+        bot.send_chat_action(update.message.chat.id, action=telegram.ChatAction.RECORD_VIDEO)
         tmpvideo = makevideo()
+        bot.send_chat_action(update.message.chat.id, action=telegram.ChatAction.UPLOAD_VIDEO)
         update.message.reply_video(video=open(tmpvideo, 'rb'))
         deletefile(tmpvideo)
 
