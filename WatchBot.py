@@ -25,7 +25,7 @@ temppath = configuration.get('temppath')
 
 #General System
 watchbot = telegram.Bot(token)
-systemon = True
+systemon = False
 motioncounter = 0
 
 #Camera
