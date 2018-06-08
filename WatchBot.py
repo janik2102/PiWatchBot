@@ -42,6 +42,7 @@ GPIO.setup(motionpin, GPIO.IN)
 
 #Activate the watchbot
 def on(bot, update):
+    global systemon
     if (isAdmin(update.message.chat.username)):
         if(not systemon):
             print('Watchsystem activated.')
@@ -54,6 +55,7 @@ def on(bot, update):
 
 #Deactivate the watchbot
 def off(bot, update):
+    global systemon
     if (isAdmin(update.message.chat.username)):
         if(systemon):
             print('Watchsystem deactivated.')
@@ -156,7 +158,7 @@ updater.dispatcher.add_handler(CommandHandler('off', off))
 updater.dispatcher.add_handler(CommandHandler('picture', picture))
 updater.dispatcher.add_handler(CommandHandler('savepicture', savePicture))
 updater.dispatcher.add_handler(CommandHandler('video', video))
-updater.dispatcher.add_handler(CommandHandler('savevideo', video))
+updater.dispatcher.add_handler(CommandHandler('savevideo', saveVideo))
 
 try:
     #Start the Updater
