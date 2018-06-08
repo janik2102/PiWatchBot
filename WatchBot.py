@@ -142,7 +142,7 @@ def motion_callback(channel):
         print('Make Picture of the room.')
         tmppicture = makepicture()
         watchbot.send_chat_action(admin.get('id'), action=telegram.ChatAction.UPLOAD_PHOTO)
-        watchbot.send_photo(photo=open(tmppicture, 'rb'))
+        watchbot.send_photo(admin.get('id'), photo=open(tmppicture, 'rb'))
         deletefile(tmppicture)
 
 
