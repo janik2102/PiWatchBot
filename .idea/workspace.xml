@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="7f945d87-393c-4ff7-b8d0-deb0786b7e11" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/WatchBot.py" afterPath="$PROJECT_DIR$/WatchBot.py" />
-      <change beforePath="$PROJECT_DIR$/configuration.json" afterPath="$PROJECT_DIR$/configuration.json" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,8 +16,8 @@
       <file leaf-file-name="WatchBot.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/WatchBot.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="391">
-              <caret line="122" column="58" lean-forward="true" selection-start-line="122" selection-start-column="58" selection-end-line="122" selection-end-column="58" />
+            <state relative-caret-position="844">
+              <caret line="158" column="52" lean-forward="false" selection-start-line="158" selection-start-column="52" selection-end-line="158" selection-end-column="52" />
               <folding>
                 <element signature="e#193#208#0" expanded="true" />
               </folding>
@@ -246,8 +245,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/WatchBot.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="391">
-          <caret line="122" column="58" lean-forward="true" selection-start-line="122" selection-start-column="58" selection-end-line="122" selection-end-column="58" />
+        <state relative-caret-position="844">
+          <caret line="158" column="52" lean-forward="false" selection-start-line="158" selection-start-column="52" selection-end-line="158" selection-end-column="52" />
           <folding>
             <element signature="e#193#208#0" expanded="true" />
           </folding>

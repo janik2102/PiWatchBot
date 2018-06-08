@@ -40,6 +40,7 @@ GPIO.setup(motionpin, GPIO.IN)
 #Define User Commands
 ###########################################################################################
 
+#Activate the watchbot
 def on(bot, update):
     if (isAdmin(update.message.chat.username)):
         if(not systemon):
@@ -51,7 +52,7 @@ def on(bot, update):
             print('Watchsystem already activated')
             update.message.reply_text('Watchsystem already activated')
 
-
+#Deactivate the watchbot
 def off(bot, update):
     if (isAdmin(update.message.chat.username)):
         if(systemon):
@@ -62,7 +63,7 @@ def off(bot, update):
             print('Watchsystem already deactivated.')
             update.message.reply_text('Watchsystem already deactivated')
 
-
+#Get Picture of the room
 def picture(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Make Picture of the room.')
@@ -71,7 +72,14 @@ def picture(bot, update):
         update.message.reply_photo(photo=open(tmppicture, 'rb'))
         deletefile(tmppicture)
 
+#Save Picture of the romm
+def savePicture(bot, update):
+    if (isAdmin(update.message.chat.username)):
+        print('Save Picture of the room.')
+        tmppicture = makepicture()
+        update.message.reply_text('Picture saved as: \"' + tmppicture + '\"')
 
+#Get Video of the room
 def video(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Make Video of the room.')
@@ -80,6 +88,14 @@ def video(bot, update):
         bot.send_chat_action(update.message.chat.id, action=telegram.ChatAction.UPLOAD_VIDEO)
         update.message.reply_video(video=open(tmpvideo, 'rb'))
         deletefile(tmpvideo)
+
+#Save Video of the room
+def saveVideo(bot, update):
+    if (isAdmin(update.message.chat.username)):
+        print('Save Video of the room.')
+        bot.send_chat_action(update.message.chat.id, action=telegram.ChatAction.RECORD_VIDEO)
+        tmpvideo = makevideo()
+        update.message.reply_text('Video saved as: \"' + tmpvideo + '\"')
 
 ###########################################################################################
 #Define Methods
@@ -116,11 +132,18 @@ def deletefile(path):
 
 #Callback if motion is detected
 def motion_callback(channel):
-    global motioncounter
-    motioncounter += 1
-    detectionstring = 'Motion detected! \n Recognized Motions: ' + str(motioncounter)
-    print(detectionstring)
-    watchbot.send_message(admin.get('id'), detectionstring)
+    global systemon
+    if (systemon):
+        global motioncounter
+        motioncounter += 1
+        detectionstring = 'Motion detected! #' + str(motioncounter)
+        print(detectionstring)
+        watchbot.send_message(admin.get('id'), detectionstring)
+        print('Make Picture of the room.')
+        tmppicture = makepicture()
+        watchbot.send_chat_action(admin.get('id'), action=telegram.ChatAction.UPLOAD_PHOTO)
+        watchbot.send_photo(photo=open(tmppicture, 'rb'))
+        deletefile(tmppicture)
 
 
 ###########################################################################################
@@ -131,7 +154,9 @@ updater = Updater(token)
 updater.dispatcher.add_handler(CommandHandler('on', on))
 updater.dispatcher.add_handler(CommandHandler('off', off))
 updater.dispatcher.add_handler(CommandHandler('picture', picture))
+updater.dispatcher.add_handler(CommandHandler('savepicture'), savePicture)
 updater.dispatcher.add_handler(CommandHandler('video', video))
+updater.dispatcher.add_handler(CommandHandler('savevideo', video))
 
 try:
     #Start the Updater
