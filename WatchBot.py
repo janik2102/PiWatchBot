@@ -43,13 +43,14 @@ GPIO.setup(motionpin, GPIO.IN)
 #Activate the watchbot
 def on(bot, update):
     global systemon
+    global motioncounter
     if (isAdmin(update.message.chat.username)):
         if(not systemon):
             print('Watchsystem activated.')
             motioncounter = 0
             systemon = True
             update.message.reply_text('Watchsystem activated.')
-        if(systemon):
+        else:
             print('Watchsystem already activated')
             update.message.reply_text('Watchsystem already activated')
 
@@ -61,7 +62,7 @@ def off(bot, update):
             print('Watchsystem deactivated.')
             systemon = False
             update.message.reply_text('Watchsystem deactivated.')
-        if(not systemon):
+        else:
             print('Watchsystem already deactivated.')
             update.message.reply_text('Watchsystem already deactivated')
 
