@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 
 from picamera import PiCamera
 from time import sleep
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Bot
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 ###########################################################################################
 #Initialisation
@@ -24,7 +24,7 @@ picpath = configuration.get('picpath')
 temppath = configuration.get('temppath')
 
 #General System
-watchbot = Bot(token)
+watchbot = telegram.Bot(token)
 systemon = True
 motioncounter = 0
 
@@ -116,10 +116,12 @@ def deletefile(path):
 
 #Callback if motion is detected
 def motion_callback(channel):
-    motioncounter+=1
-    detectionstring = 'Motion detected! \n Recognized Motions: ' + motioncounter
+    global motioncounter
+    motioncounter += 1
+    detectionstring = 'Motion detected! \n Recognized Motions: ' + str(motioncounter)
     print(detectionstring)
-    watchbot.send_message(id, detectionstring )
+    watchbot.send_message(admin.get('id'), detectionstring)
+
 
 ###########################################################################################
 #Main Code
