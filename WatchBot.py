@@ -9,7 +9,7 @@ import RPi.GPIO as GPIO
 
 from picamera import PiCamera
 from time import sleep
-from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, Bot
 
 ###########################################################################################
 #Initialisation
@@ -24,7 +24,9 @@ picpath = configuration.get('picpath')
 temppath = configuration.get('temppath')
 
 #General System
+watchbot = Bot(token)
 systemon = True
+motioncounter = 0
 
 #Camera
 camera = PiCamera()
@@ -40,16 +42,25 @@ GPIO.setup(motionpin, GPIO.IN)
 
 def on(bot, update):
     if (isAdmin(update.message.chat.username)):
-        print('Watchsystem activated.')
-        systemon = True
-        update.message.reply_text('Watchsystem activated.')
+        if(not systemon):
+            print('Watchsystem activated.')
+            motioncounter = 0
+            systemon = True
+            update.message.reply_text('Watchsystem activated.')
+        if(systemon):
+            print('Watchsystem already activated')
+            update.message.reply_text('Watchsystem already activated')
 
 
 def off(bot, update):
     if (isAdmin(update.message.chat.username)):
-        print('Watchsystem deactivated.')
-        systemon = False
-        update.message.reply_text('Watchsystem deactivated.')
+        if(systemon):
+            print('Watchsystem deactivated.')
+            systemon = False
+            update.message.reply_text('Watchsystem deactivated.')
+        if(not systemon):
+            print('Watchsystem already deactivated.')
+            update.message.reply_text('Watchsystem already deactivated')
 
 
 def picture(bot, update):
@@ -105,7 +116,10 @@ def deletefile(path):
 
 #Callback if motion is detected
 def motion_callback(channel):
-    print('Motion detected!')
+    motioncounter+=1
+    detectionstring = 'Motion detected! \n Recognized Motions: ' + motioncounter
+    print(detectionstring)
+    watchbot.send_message(id, detectionstring )
 
 ###########################################################################################
 #Main Code
@@ -117,13 +131,16 @@ updater.dispatcher.add_handler(CommandHandler('off', off))
 updater.dispatcher.add_handler(CommandHandler('picture', picture))
 updater.dispatcher.add_handler(CommandHandler('video', video))
 
-#Start the Bot
-updater.start_polling()
+try:
+    #Start the Updater
+    updater.start_polling()
 
-#Detecting Motion
-GPIO.add_event_detect(motionpin, GPIO.RISING, callback=motion_callback)
+    #Detecting Motion
+    GPIO.add_event_detect(motionpin, GPIO.RISING, callback=motion_callback)
 
-updater.idle()
-
-GPIO.cleanup()
+    updater.idle()
+except KeyboardInterrupt:
+    print('Exit.')
+    GPIO.cleanup()
+    updater.stop()
 
