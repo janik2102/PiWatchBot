@@ -23,6 +23,8 @@ def on(bot, update):
     if (isAdmin(update.message.chat.username)):
         print('Watchsystem activated.')
         systemon = True
+        bot.sendChatAction(admin.get('username'), 'Activate Watchsystem')
+        sleep(3)
         update.message.reply_text('Watchsystem activated.')
 
 def off(bot, update):
